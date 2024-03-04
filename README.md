@@ -1,3 +1,3 @@
-Matricula: A01709887
-Nombre: Ricardo Sierra Roa
 # linux-embebido-601-Equipo1
+Matricula: A01709887<br>
+Nombre: Ricardo Sierra Roa

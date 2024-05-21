@@ -7,6 +7,7 @@ from tkinter.ttk import Combobox, Style
 from sensor_serial import BAUDRATES
 from sensor_serial import SensorSerial
 from utils import find_available_serial_ports
+import re
 
 class App(Frame):
     def __init__(self, master, *args, **kwargs)->None:
@@ -105,10 +106,18 @@ class App(Frame):
 
     def read_temperature(self) -> None:
         if self.sensor_serial is not None:
-            temperature = self.sensor_serial.send('TC2')
-            self.temperature_label['text'] = temperature[:-3]
+            temperature_response = self.sensor_serial.send('TC2')
+            temperature = self.extract_temperature(temperature_response)
+            self.temperature_label['text'] = f"{temperature} °C"
             return
         raise RuntimeError('Serial connection has not been initialized')
+
+    def extract_temperature(self, response: str) -> str:
+        match = re.search(r'(\d+\.\d+)', response)
+        if match:
+            return match.group(1)
+        else:
+            raise ValueError('Invalid temperature response')
 
 
 root = Tk()
